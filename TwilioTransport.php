@@ -60,7 +60,7 @@ final class TwilioTransport extends AbstractTransport
 
         $from = $message->getFrom() ?: $this->from;
 
-        if (!preg_match('/^[a-zA-Z0-9\s]{2,11}$/', $from) && !preg_match('/^\+[1-9]\d{1,14}$/', $from)) {
+        if (!isset($options['messaging_service_sid']) && !preg_match('/^[a-zA-Z0-9\s]{2,11}$/', $from) && !preg_match('/^\+[1-9]\d{1,14}$/', $from)) {
             throw new InvalidArgumentException(sprintf('The "From" number "%s" is not a valid phone number, shortcode, or alphanumeric sender ID.', $from));
         }
 
@@ -73,6 +73,9 @@ final class TwilioTransport extends AbstractTransport
         ];
         if (isset($options['webhook_url'])) {
             $body['StatusCallback'] = $options['webhook_url'];
+        }
+        if (isset($options['messaging_service_sid'])) {
+            $body['messagingServiceSid'] = $options['messaging_service_sid'];
         }
         $response = $this->client->request('POST', $endpoint, [
             'auth_basic' => [$this->accountSid, $this->authToken],
