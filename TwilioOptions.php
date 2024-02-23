@@ -39,4 +39,14 @@ final class TwilioOptions implements MessageOptionsInterface
 
         return $this;
     }
+
+    /**
+     * @return $this
+     */
+    public function messagingServiceSid(string $sid): static
+    {
+        $this->options['messaging_service_sid'] = $sid;
+
+        return $this;
+    }
 }
